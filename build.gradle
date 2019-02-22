@@ -54,7 +54,7 @@ protobuf {
             artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
         }
     }
-    // C:\Users\anind\.gradle\caches\modules-2\files-2.1\com.google.protobuf\protoc\3.6.1\868972143f75213541c0730e6837f9e80272708c
+    
     generateProtoTasks {
         all()*.plugins {
             grpc {}
