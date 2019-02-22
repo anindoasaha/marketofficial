@@ -1,0 +1,90 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'idea'
+
+    id 'com.google.protobuf' version '0.8.5'
+}
+
+group 'com.embleon'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.9
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+def grpcVersion = '1.18.0' // CURRENT_GRPC_VERSION
+def protobufVersion = '3.6.1'
+def protocVersion = protobufVersion
+def jacksonVersion = "2.9.6"
+
+application {
+    mainClassName = 'com.embleon.marketofficial.service.impl.ProductCatalogService'
+}
+
+
+
+dependencies {
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    implementation "org.apache.logging.log4j:log4j-core:2.11.1"
+
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    runtime "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
+            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+            "io.netty:netty-tcnative-boringssl-static:2.0.8.Final"
+
+    compileOnly "javax.annotation:javax.annotation-api:1.2"
+
+    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.mockito:mockito-core:1.9.5"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    // C:\Users\anind\.gradle\caches\modules-2\files-2.1\com.google.protobuf\protoc\3.6.1\868972143f75213541c0730e6837f9e80272708c
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+
+        all()*.builtins {
+            js {
+                option "import_style=commonjs"
+            }
+        }
+
+        all()*.builtins {
+            "grpc-web" {
+                option "import_style=commonjs"
+                option "mode=grpcwebtext"
+            }
+        }
+
+
+
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+

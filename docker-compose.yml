@@ -1,0 +1,18 @@
+version: '3'
+services:
+  productcatalog-server:
+    build:
+      context: ./
+      dockerfile: src/main/resources/Dockerfile
+    image: productcatalog/server
+    container_name: productcatalog-server
+    ports:
+      - "9090:9090"
+  productcatalog-envoy:
+    build:
+      context: ./src/main/resources
+      dockerfile: envoy.Dockerfile
+    image: productcatalog/envoy
+    container_name: productcatalog-envoy
+    ports:
+      - "8080:8080"
